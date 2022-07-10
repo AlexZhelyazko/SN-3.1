@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import './App.sass';
 import { LoginForm } from './components/LoginForm/login';
 import { Dialogs } from './Layouts/Dialogs/dialogs';
@@ -8,6 +8,7 @@ import { Profile } from './Layouts/Profile/profile';
 import { Users } from './Layouts/Users/users';
 import { Preloader } from './components/Preloader/preloader'
 import { initializeTC } from './redux/app-reducer';
+import { Settings } from './Layouts/Settings/settings'
 import { News, NewsItem, NewsSections } from './Layouts/News/news';
 import { Memes } from './Layouts/Memes/memes';
 import { getIsAuth } from './Selectors/selectors';
@@ -15,8 +16,6 @@ import { Layout } from './components/Layout/layout';
 
 const App2 = () => {
   const isAuth = useSelector((state) => getIsAuth(state))
-  const location = useLocation()
-  console.log(location);
   if (!isAuth) return <Navigate to='/login' />
   return (
     <div>
@@ -27,8 +26,9 @@ const App2 = () => {
           <Route path='/users' element={<Users />} />
           <Route path='/users/*' element={<Profile />} />
           <Route path='/news' element={<NewsSections />} />
-          <Route path='news/section' element={<News />} />
-          <Route path='news/section/:id' element={<NewsItem />} />
+          <Route path='news/:section' element={<News />} />
+          <Route path='news/:section/:id' element={<NewsItem />} />
+          <Route path='/settings' element={<Settings/>}/>
           <Route path='/memes' element={<Memes />} />
         </Route>
       </Routes>

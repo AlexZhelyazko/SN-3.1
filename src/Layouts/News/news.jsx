@@ -1,4 +1,5 @@
 import './news.sass'
+import { useParams } from 'react-router-dom'
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
@@ -22,11 +23,11 @@ export const NewsSections = () => {
 }
 
 export const News = () => {
+    let {section} = useParams()
     let newsArray = useSelector((state) => state.news)
-    const match = useMatch('/news/:section')
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(setNewsTC(match.params.section))
+        dispatch(setNewsTC(section))
     }, [])
 
     return (
@@ -34,7 +35,7 @@ export const News = () => {
         <div className="news__wrapper">
             {newsArray.news.length === 0 ? <Preloader /> : <div>{newsArray.news.map((el, index) => {
                 return (
-                    <NavLink onClick={() => dispatch(setCurrentNewsItem(index))} to={`/news/${index}`} className={index % 7 === 0 ? "news__content-main" : "news__content"}>
+                    <NavLink onClick={() => dispatch(setCurrentNewsItem(index))} to={`/news/${section}/${index}`} className={index % 7 === 0 ? "news__content-main" : "news__content"}>
                         <span className={index % 7 === 0 ? 'news__title-main' : 'news__title'}>{el.title}</span>
                         <img className={index % 7 === 0 ? "news__image-main" : "news__image"}
                             src={index % 7 === 0 ? el?.multimedia?.[0]?.url : el?.multimedia?.[1]?.url}
@@ -50,6 +51,7 @@ export const News = () => {
 export const NewsItem = () => {
     const news = useSelector((state) => state.news)
     let index = news.currentNewsItem
+    console.log(useParams());
     console.log(news);
     return (
         <div>
