@@ -40,7 +40,7 @@ export const UsersAPI = {
     unfollowUser(id) {
         return instance.delete(`/follow/${id}`)
     },
-    getUsers(pageSize=10, currentPage=1) {
+    getUsers(pageSize=20, currentPage=1) {
         return instance.get(`/users?count=${pageSize}&page=${currentPage}`)
     },
 }
@@ -52,7 +52,7 @@ export const NewsAPI = {
 }
 
 export const MemesAPI = {
-    getMemes() {
-        return axios.get('https://meme-api.herokuapp.com/gimme/2')
+    getMemes(page) {
+        return axios.get(`https://meme-api.herokuapp.com/gimme/${page}`)
     }
 }

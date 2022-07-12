@@ -5,13 +5,15 @@ const UNFOLLOW = 'UNFOLLOW'
 const SET_USERS = 'SET_USERS'
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
 const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_USERS_COUNT'
+const SET_FETCHING = 'SET_FETCHING'
 
 const initialState = 
 {
     users: [],
     currentPage: 1,
     totalUsersCount: 0,
-    pageSize: 10,
+    pageSize: 20,
+    fetching: true,
 }
 
 export let usersReducer = (state = initialState, action) => {
@@ -43,7 +45,7 @@ export let usersReducer = (state = initialState, action) => {
             case SET_USERS:
                 return {
                     ...state,
-                    users: action.users
+                    users: [...state.users, ...action.users]
                 }
             case SET_CURRENT_PAGE:
                 return {
@@ -54,6 +56,11 @@ export let usersReducer = (state = initialState, action) => {
                 return {
                     ...state,
                     totalUsersCount: action.totalUsersCount
+                }
+            case SET_FETCHING:
+                return {
+                    ...state,
+                    fetching: action.fetching
                 }
         default:
             return state
@@ -80,13 +87,20 @@ export const setTotalUsersCount = (totalUsersCount) => {
     return {type: SET_TOTAL_USERS_COUNT, totalUsersCount}
 }
 
+export const setFetching = (fetching) => {
+    return {type: SET_FETCHING, fetching}
+}
+
 export const getUsersTC = (pageSize, currentPage) => {
     return (dispatch) => {
         UsersAPI.getUsers(pageSize, currentPage).then((response) => {
             dispatch(setTotalUsersCount(response.data.totalCount))
             let users = response.data.items;
             dispatch(setUsers(users));
-            dispatch(setCurrentPage(currentPage))
+            dispatch(setCurrentPage(currentPage+1))
+        })
+        .finally(() => {
+            dispatch(setFetching(false))
         })
     }
 }
