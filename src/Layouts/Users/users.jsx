@@ -7,6 +7,7 @@ import { UsersAPI } from "../../api/api"
 import { Preloader } from "../../components/Preloader/preloader"
 
 export const Users = () => {
+    const [value, setValue] = useState('')
     let newUserList = []
     let users = useSelector((state) => state.users)
     let dispatch = useDispatch()
@@ -33,7 +34,7 @@ export const Users = () => {
 
 let pages = Math.ceil(users.totalUsersCount / users.pageSize)
 
-    newUserList = users.users.map(el => {
+    newUserList = users.users.filter((user) => user.name.toLowerCase().includes(value.toLowerCase())).map(el => {
         return <div className="users__page-user">
             <NavLink to={`/users/${el.id}`}>
                 <img className="users__page-image" src={el.photos.small || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'} alt="User Icon" />
@@ -61,7 +62,7 @@ let pages = Math.ceil(users.totalUsersCount / users.pageSize)
 
     return (
         <div className='users__page-container'>
-            <input type="search" />
+            <input type="search" onChange={(event) => setValue(event.target.value)}/>
             {newUserList.length === 0 ? <Preloader /> : newUserList}
         </div>
     )
