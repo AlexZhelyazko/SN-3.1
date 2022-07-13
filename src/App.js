@@ -10,7 +10,6 @@ import { Preloader } from './components/Preloader/preloader'
 import { initializeTC } from './redux/app-reducer';
 import { Settings } from './Layouts/Settings/settings'
 import { News, NewsItem, NewsSections } from './Layouts/News/news';
-import { Memes } from './Layouts/Memes/memes';
 import { getIsAuth } from './Selectors/selectors';
 import { Layout } from './components/Layout/layout';
 
@@ -29,7 +28,6 @@ const App2 = () => {
           <Route path='news/:section' element={<News />} />
           <Route path='news/:section/:id' element={<NewsItem />} />
           <Route path='/settings' element={<Settings/>}/>
-          <Route path='/memes' element={<Memes />} />
         </Route>
       </Routes>
     </div>

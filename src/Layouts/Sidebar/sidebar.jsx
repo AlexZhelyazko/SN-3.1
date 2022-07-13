@@ -8,7 +8,6 @@ const links = [
     { url: '/dialogs', name: 'Dialogs' },
     { url: '/news', name: 'News' },
     { url: '/settings', name: 'Settings' },
-    { url: '/memes', name: 'Meme' }
 ];
 
 export const Sidebar = (props) => {
