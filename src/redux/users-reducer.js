@@ -91,6 +91,32 @@ export const setFetching = (fetching) => {
     return {type: SET_FETCHING, fetching}
 }
 
+export const toggleFollowUser = (id, following) => async (dispatch) => {
+    let response = null
+    if (following) {
+        let response = await UsersAPI.unfollowUser(id)
+        dispatch(unfollow(id))
+    }
+    else {
+        let response = await UsersAPI.followUser(id)
+        dispatch(follow(id))
+    }
+}
+
+export const unfollowUser = (id) => async (dispatch) => {
+    const response = await UsersAPI.unfollowUser(id)
+    if (response.data.resultCode) {
+        dispatch(unfollow(id))
+    }
+}
+
+export const followUser = (id) => async (dispatch) => {
+    const response = await UsersAPI.followUser(id)
+    if (response.data.resultCode) {
+        dispatch(follow(id))
+    }
+}
+
 export const getUsersTC = (pageSize, currentPage) => {
     return (dispatch) => {
         UsersAPI.getUsers(pageSize, currentPage).then((response) => {

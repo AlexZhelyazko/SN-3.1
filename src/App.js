@@ -36,12 +36,10 @@ const App2 = () => {
 
 function App() {
   const initialize = useSelector((state) => state.initialize.initialize)
-  //const isLoaded = useSelector((state) => state.auth.isLoaded)
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(initializeTC())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

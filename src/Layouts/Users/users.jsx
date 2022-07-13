@@ -1,16 +1,22 @@
 import './users.sass'
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getUsersTC, unfollow, follow, setCurrentPage, setFetching } from "../../redux/users-reducer"
+import { getUsersTC, unfollow, follow, setCurrentPage, setFetching, followUser, unfollowUser, toggleFollowUser } from "../../redux/users-reducer"
 import { NavLink } from "react-router-dom"
 import { UsersAPI } from "../../api/api"
 import { Preloader } from "../../components/Preloader/preloader"
+import { ButtonF } from '../../components/Button/button'
+import { useCallback } from 'react'
 
 export const Users = () => {
     const [value, setValue] = useState('')
     let newUserList = []
     let users = useSelector((state) => state.users)
     let dispatch = useDispatch()
+
+    const toggleFollowing = (id, following) => {
+        dispatch(toggleFollowUser(id, following))
+    }
 
     useEffect(() => {
         if(users.fetching) {
@@ -42,20 +48,9 @@ let pages = Math.ceil(users.totalUsersCount / users.pageSize)
             <NavLink to={`/users/${el.id}`}>
                 <span className="users__page-name">{el.name}</span>
             </NavLink>
-            {el.followed ? <button onClick={() => {
-                UsersAPI.unfollowUser(el.id).then((response) => {
-                    if (response.data.resultCode === 0) {
-                        dispatch(unfollow(el.id))
-                    }
-                })
-            }}>Unfollow </button> : <button onClick={() => {
-                UsersAPI.followUser(el.id)
-                    .then((response) => {
-                        if (response.data.resultCode === 0) {
-                            dispatch(follow(el.id))
-                        }
-                    })
-            }}>Follow</button>
+            {el.followed 
+            ? <ButtonF name = 'Unfollow' id={el.id} following={true} toggleFollowing={toggleFollowing}>Unfollow </ButtonF> 
+            : <ButtonF name = 'Follow' id={el.id} following={false} toggleFollowing={toggleFollowing}>Follow</ButtonF>
             }
         </div>
     })
