@@ -1,11 +1,10 @@
 import './users.sass'
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getUsersTC, unfollow, follow, setCurrentPage, setFetching, followUser, unfollowUser, toggleFollowUser } from "../../redux/users-reducer"
+import { getUsersTC, setFetching, toggleFollowUser } from "../../redux/users-reducer"
 import { NavLink } from "react-router-dom"
-import { UsersAPI } from "../../api/api"
 import { Preloader } from "../../components/Preloader/preloader"
-import { ButtonF } from '../../components/Button/button'
+import { Button } from '../../components/Button/button'
 import { useCallback } from 'react'
 
 export const Users = () => {
@@ -38,8 +37,6 @@ export const Users = () => {
         }
     }
 
-let pages = Math.ceil(users.totalUsersCount / users.pageSize)
-
     newUserList = users.users.filter((user) => user.name.toLowerCase().includes(value.toLowerCase())).map(el => {
         return <div className="users__page-user">
             <NavLink to={`/users/${el.id}`}>
@@ -49,8 +46,8 @@ let pages = Math.ceil(users.totalUsersCount / users.pageSize)
                 <span className="users__page-name">{el.name}</span>
             </NavLink>
             {el.followed 
-            ? <ButtonF name = 'Unfollow' id={el.id} following={true} toggleFollowing={toggleFollowing}>Unfollow </ButtonF> 
-            : <ButtonF name = 'Follow' id={el.id} following={false} toggleFollowing={toggleFollowing}>Follow</ButtonF>
+            ? <Button name = 'Unfollow' id={el.id} following={true} toggleFollowing={toggleFollowing}>Unfollow </Button> 
+            : <Button name = 'Follow' id={el.id} following={false} toggleFollowing={toggleFollowing}>Follow</Button>
             }
         </div>
     })
