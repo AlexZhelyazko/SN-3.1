@@ -52,7 +52,8 @@ export const NewsAPI = {
 }
 
 export const MemesAPI = {
-    getMemes(page) {
-        return axios.get(`https://meme-api.herokuapp.com/gimme/${page}`)
+    getMemes() {
+        console.log('request');
+        return axios.get(`https://meme-api.herokuapp.com/gimme/1`)
     }
 }
