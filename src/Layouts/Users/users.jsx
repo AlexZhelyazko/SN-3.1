@@ -6,11 +6,16 @@ import { NavLink } from "react-router-dom"
 import { Preloader } from "../../components/Preloader/preloader"
 import { Button } from '../../components/Button/button'
 import { useCallback } from 'react'
+import { UsersList } from './UsersList/userslist'
 
 export const Users = () => {
     const [value, setValue] = useState('')
     let newUserList = []
-    let users = useSelector((state) => state.users)
+    let fetching = useSelector((state) => state.users.fetching)
+    let pageSize = useSelector((state) => state.users.pageSize)
+    let users = useSelector((state) => state.users.users)
+    let currentPage = useSelector((state) => state.users.currentPage)
+
     let dispatch = useDispatch()
 
     const toggleFollowing = (id, following) => {
@@ -18,10 +23,10 @@ export const Users = () => {
     }
 
     useEffect(() => {
-        if(users.fetching) {
-            dispatch(getUsersTC(users.pageSize, users.currentPage))
+        if(fetching) {
+            dispatch(getUsersTC(pageSize, currentPage))
         }
-    }, [users.fetching])
+    }, [fetching])
 
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler)
@@ -37,25 +42,10 @@ export const Users = () => {
         }
     }
 
-    newUserList = users.users.filter((user) => user.name.toLowerCase().includes(value.toLowerCase())).map(el => {
-        return <div className="users__page-user">
-            <NavLink to={`/users/${el.id}`}>
-                <img className="users__page-image" src={el.photos.small || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png'} alt="User Icon" />
-            </NavLink>
-            <NavLink to={`/users/${el.id}`}>
-                <span className="users__page-name">{el.name}</span>
-            </NavLink>
-            {el.followed 
-            ? <Button name = 'Unfollow' id={el.id} following={true} toggleFollowing={toggleFollowing}>Unfollow </Button> 
-            : <Button name = 'Follow' id={el.id} following={false} toggleFollowing={toggleFollowing}>Follow</Button>
-            }
-        </div>
-    })
-
     return (
         <div className='users__page-container'>
             <input type="search" onChange={(event) => setValue(event.target.value)}/>
-            {newUserList.length === 0 ? <Preloader /> : newUserList}
+            {users.length === 0 ? <Preloader/> : <UsersList users = {users} value = {value} toggleFollowing = {toggleFollowing}/>}
         </div>
     )
 }
